@@ -1,4 +1,4 @@
-package autotests.CDUD;
+package autotests.CRUD;
 
 import autotests.CommonMethod;
 import com.consol.citrus.TestCaseRunner;
@@ -16,9 +16,9 @@ public class DeleteDuckTest extends CommonMethod {
     public void successfulDelete(@Optional @CitrusResource TestCaseRunner runner) {
         createDuck(runner, "green", 0.15, "rubber", "quack", "FIXED");
         validateStatusAndSaveId(runner, HttpStatus.OK);
+
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
-        // проверить что ее нет в бд
+        // + проверить что ее нет в бд
     }
-
 }

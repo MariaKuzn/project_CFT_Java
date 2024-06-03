@@ -12,7 +12,8 @@ import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 public class CommonMethod extends TestNGCitrusSpringSupport {
     //Все параметры
-    public void createDuck(TestCaseRunner runner, String color, double height, String material, String sound, String wingsState) {
+    public void createDuck(TestCaseRunner runner,
+                           String color, double height, String material, String sound, String wingsState) {
         runner.$(http().client("http://localhost:2222")
                 .send()
                 .post("/api/duck/create")
@@ -42,7 +43,8 @@ public class CommonMethod extends TestNGCitrusSpringSupport {
         //Проверка ответа что удалилось
     }
 
-    public void validateResponseStatusAndJSONPath(TestCaseRunner runner, HttpStatus status, JsonPathMessageValidationContext.Builder body) {
+    public void validateResponseStatusAndJSONPath(TestCaseRunner runner, HttpStatus status,
+                                                  JsonPathMessageValidationContext.Builder body) {
         runner.$(http().client("http://localhost:2222")
                 .receive()
                 .response(status)
@@ -51,4 +53,15 @@ public class CommonMethod extends TestNGCitrusSpringSupport {
                 .validate(body));
     }
 
+    // Проверка числа на четность, number - передается в виде строки
+    public boolean isEven(String number) {
+        int n;
+        try {
+            n = Integer.parseInt(number);
+            return n % 2 == 0;
+        } catch (NumberFormatException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 }

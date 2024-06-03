@@ -1,4 +1,4 @@
-package autotests.CDUD;
+package autotests.CRUD;
 
 import autotests.CommonMethod;
 import com.consol.citrus.TestCaseRunner;
@@ -13,18 +13,21 @@ public class CreateDuckTest extends CommonMethod {
     @Test(description = "Проверка того, что уточка создана. Материал = rubber")
     @CitrusTest
     public void successfulCreateRubber(@Optional @CitrusResource TestCaseRunner runner) {
-        createDuck(runner, "2green", 0.15, "rubber", "quack", "FIXED");
+        createDuck(runner, "green", 0.15, "rubber", "quack", "FIXED");
         validateStatusAndSaveId(runner, HttpStatus.OK);
-        // + Проверить что утка есть в БД, все параметры совпадают
+
         deleteDuck(runner, "${duckId}");
+        // + Проверить что утка есть в БД, все параметры совпадают
+
     }
 
     @Test(description = "Проверка того, что уточка создана. Материал = wood")
     @CitrusTest
     public void successfulCreateWood(@Optional @CitrusResource TestCaseRunner runner) {
-        createDuck(runner, "2yellow", 0.15, "wood", "quack", "FIXED");
+        createDuck(runner, "yellow", 0.15, "wood", "quack", "FIXED");
         validateStatusAndSaveId(runner, HttpStatus.OK);
-        // + Проверить что утка есть в БД, все параметры совпадают
+
         deleteDuck(runner, "${duckId}");
+        // + Проверить что утка есть в БД, все параметры совпадают
     }
 }
