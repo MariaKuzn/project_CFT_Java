@@ -27,14 +27,6 @@ public class CommonMethod extends TestNGCitrusSpringSupport {
                         + "\"\n" + "}"));
     }
 
-    public void validateStatusAndSaveId(TestCaseRunner runner, HttpStatus status) {
-        runner.$(http().client("http://localhost:2222")
-                .receive()
-                .response(status)
-                .message()
-                .extract(fromBody().expression("$.id", "duckId")));
-    }
-
     public void deleteDuck(TestCaseRunner runner, String id) {
         runner.$(http().client("http://localhost:2222")
                 .send()
@@ -43,14 +35,22 @@ public class CommonMethod extends TestNGCitrusSpringSupport {
         //Проверка ответа что удалилось
     }
 
+    public void validateStatusAndSaveId(TestCaseRunner runner, HttpStatus status) {
+        runner.$(http().client("http://localhost:2222")
+                .receive()
+                .response(status)
+                .message()
+                .extract(fromBody().expression("$.id", "duckId")));
+    }
+
     public void validateResponseStatusAndJSONPath(TestCaseRunner runner, HttpStatus status,
-                                                  JsonPathMessageValidationContext.Builder body) {
+                                                  JsonPathMessageValidationContext.Builder jsonPath) {
         runner.$(http().client("http://localhost:2222")
                 .receive()
                 .response(status)
                 .message()
                 .type(MessageType.JSON)
-                .validate(body));
+                .validate(jsonPath));
     }
 
     // Проверка числа на четность, number - передается в виде строки
