@@ -21,7 +21,7 @@ public class FlyTest extends CommonMethod {
 
         flyDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "I am flying :)"));
+                jsonPath().expression("$.message", "I’m flying"));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
@@ -36,7 +36,7 @@ public class FlyTest extends CommonMethod {
 
         flyDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "I can not fly :C"));
+                jsonPath().expression("$.message", "I can’t fly"));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
@@ -51,7 +51,7 @@ public class FlyTest extends CommonMethod {
 
         flyDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "Wings are not detected :("));
+                jsonPath().expression("$.message", "Wings are not detected"));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));

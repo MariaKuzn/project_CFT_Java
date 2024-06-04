@@ -31,7 +31,7 @@ public class QuackTest extends CommonMethod {
 
         quackDuck(runner, "${duckId}", String.valueOf(repetitionCount), String.valueOf(soundCount));
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", generateQuackMessage(sound, repetitionCount, soundCount)));
+                jsonPath().expression("$.sound", generateQuackMessage(sound, repetitionCount, soundCount)));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
@@ -57,7 +57,7 @@ public class QuackTest extends CommonMethod {
 
         quackDuck(runner, "${duckId}", String.valueOf(repetitionCount), String.valueOf(soundCount));
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", generateQuackMessage(sound, repetitionCount, soundCount)));
+                jsonPath().expression("$.sound", generateQuackMessage(sound, repetitionCount, soundCount)));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
