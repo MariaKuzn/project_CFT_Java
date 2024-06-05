@@ -42,6 +42,15 @@ public class CommonMethod extends TestNGCitrusSpringSupport {
                 .message()
                 .extract(fromBody().expression("$.id", "duckId")));
     }
+    public void validateStatusBodyAndSaveId(TestCaseRunner runner, HttpStatus status, JsonPathMessageValidationContext.Builder jsonPath) {
+        runner.$(http().client("http://localhost:2222")
+                .receive()
+                .response(status)
+                .message()
+                .type(MessageType.JSON)
+                .validate(jsonPath)
+                .extract(fromBody().expression("$.id", "duckId")));
+    }
 
     public void validateResponseStatusAndJSONPath(TestCaseRunner runner, HttpStatus status,
                                                   JsonPathMessageValidationContext.Builder jsonPath) {
