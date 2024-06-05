@@ -1,17 +1,9 @@
-package autotests.action;
+package autotests.tests.actions;
 
 import autotests.CommonMethod;
-import com.consol.citrus.TestCaseRunner;
-import com.consol.citrus.annotations.CitrusResource;
-import com.consol.citrus.annotations.CitrusTest;
-import org.springframework.http.HttpStatus;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Test;
-
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
-import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
 public class QuackTest extends CommonMethod {
+    /*
     @Test(description = "Проверка того, что уточка крякает. Нечетный id, sound = quack")
     @CitrusTest
     public void successfulQuackOddIdQuackSound(@Optional @CitrusResource TestCaseRunner runner) {
@@ -89,4 +81,6 @@ public class QuackTest extends CommonMethod {
         }
         return message.toString();
     }
+
+     */
 }

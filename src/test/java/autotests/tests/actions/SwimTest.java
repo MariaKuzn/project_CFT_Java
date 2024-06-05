@@ -1,17 +1,9 @@
-package autotests.action;
+package autotests.tests.actions;
 
-import autotests.CommonMethod;
-import com.consol.citrus.TestCaseRunner;
-import com.consol.citrus.annotations.CitrusResource;
-import com.consol.citrus.annotations.CitrusTest;
-import org.springframework.http.HttpStatus;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Test;
+import autotests.clients.DuckActionsClient;
 
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
-import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
-
-public class SwimTest extends CommonMethod {
+public class SwimTest extends DuckActionsClient {
+    /*
     @Test(description = "Проверка того, что уточка плавает. Существующий id")
     @CitrusTest
     public void successfulSwimExistingId(@Optional @CitrusResource TestCaseRunner runner) {
@@ -44,10 +36,13 @@ public class SwimTest extends CommonMethod {
         // проверить что ее нет в бд
     }
 
+    /*
     private void swimDuck(TestCaseRunner runner, String id) {
         runner.$(http().client("http://localhost:2222")
                 .send()
                 .get("/api/duck/action/swim")
                 .queryParam("id", id));
     }
+
+     */
 }

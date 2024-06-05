@@ -1,6 +1,6 @@
-package autotests.CRUD;
+package autotests.tests.CRUD;
 
-import autotests.CommonMethod;
+import autotests.clients.DuckCRUDClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
-public class UpdateDuckTest extends CommonMethod {
+public class UpdateDuckTest extends DuckCRUDClient {
     @Test(description = "Проверка того, что у уточки можно изменить цвет и высоту")
     @CitrusTest
     public void successfulUpdateColorAndHeight(@Optional @CitrusResource TestCaseRunner runner) {

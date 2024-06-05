@@ -1,6 +1,6 @@
 package autotests.tests.CRUD;
 
-import autotests.CommonMethod;
+import autotests.clients.DuckCRUDClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
-public class CreateDuckTest extends CommonMethod {
+public class CreateDuckTest extends DuckCRUDClient {
 
     @Test(description = "Проверка того, что уточка создана. Материал = rubber")
     @CitrusTest
