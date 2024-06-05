@@ -1,8 +1,7 @@
 package autotests.tests.actions;
 
-import autotests.CommonMethod;
 
-public class FlyTest extends CommonMethod {
+public class FlyTest  {
     /*
 
     @Test(description = "Проверка того, что уточка с активными крыльями летает (wingState = ACTIVE)")

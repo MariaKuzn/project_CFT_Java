@@ -1,8 +1,6 @@
 package autotests.tests.actions;
 
-import autotests.CommonMethod;
-
-public class PropertiesTest extends CommonMethod {
+public class PropertiesTest {
     /*
     @Test(description = "Проверка получения Properties для уточки. Четный id, material = wood")
     @CitrusTest

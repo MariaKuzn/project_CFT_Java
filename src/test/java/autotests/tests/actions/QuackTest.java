@@ -1,8 +1,7 @@
 package autotests.tests.actions;
 
-import autotests.CommonMethod;
 
-public class QuackTest extends CommonMethod {
+public class QuackTest   {
     /*
     @Test(description = "Проверка того, что уточка крякает. Нечетный id, sound = quack")
     @CitrusTest
