@@ -36,7 +36,8 @@ public class SwimTest extends CommonMethod {
 
         swimDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.NOT_FOUND,
-                jsonPath().expression("$.error", "Duck not found"));
+                jsonPath().expression("$.error", "Duck not found")
+                        .expression("$.message", "Duck with id = " + "${duckId}" + " is not found"));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));

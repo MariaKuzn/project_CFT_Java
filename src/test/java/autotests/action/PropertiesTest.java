@@ -37,7 +37,7 @@ public class PropertiesTest extends CommonMethod {
                         .expression("$.material", material)
                         .expression("$.sound", sound)
                         .expression("$.wingsState", wingsState));
-        // + Проверить что полученные свойства совпадают с БД yна всякий случай - вдруг хранит по-другому
+        // + Проверить что полученные свойства совпадают с БД на всякий случай - вдруг хранит по-другому
 
         deleteDuck(runner, "${duckId}");
     }
@@ -54,6 +54,12 @@ public class PropertiesTest extends CommonMethod {
         createDuck(runner, color, height, material, sound, wingsState);
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
+        //в случае создания новых id по порядку (как у нас) - этого достаточно.
+        if (isEven("${duckId}")) {
+            deleteDuck(runner, "${duckId}");
+            createDuck(runner, color, height, material, sound, wingsState);
+            validateStatusAndSaveId(runner, HttpStatus.OK);
+        }
         getProperties(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
                 jsonPath().expression("$.color", color)
@@ -61,7 +67,7 @@ public class PropertiesTest extends CommonMethod {
                         .expression("$.material", material)
                         .expression("$.sound", sound)
                         .expression("$.wingsState", wingsState));
-        // + Проверить что полученные свойства совпадают с БД
+        // + Проверить что полученные свойства совпадают с БД на всякий случай - вдруг хранит по-другому
 
         deleteDuck(runner, "${duckId}");
     }

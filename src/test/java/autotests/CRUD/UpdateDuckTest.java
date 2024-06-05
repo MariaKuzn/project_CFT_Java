@@ -75,17 +75,4 @@ public class UpdateDuckTest extends CommonMethod {
                 .queryParam("material", material)
                 .queryParam("sound", sound));
     }
-
-    // все параметры
-    private void updateDuck(TestCaseRunner runner, String id, String color, double height, String material, String sound, String wingsState) {
-        runner.$(http().client("http://localhost:2222")
-                .send()
-                .put("/api/duck/update")
-                .queryParam("id", id)
-                .queryParam("color", color)
-                .queryParam("height", String.valueOf(height))
-                .queryParam("material", material)
-                .queryParam("sound", sound)
-                .queryParam("wingsState", wingsState));
-    }
 }
