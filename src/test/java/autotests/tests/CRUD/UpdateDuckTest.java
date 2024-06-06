@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
 public class UpdateDuckTest extends DuckCRUDClient {
@@ -62,17 +61,5 @@ public class UpdateDuckTest extends DuckCRUDClient {
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
         // + проверить что ее нет в бд
 
-    }
-
-    // обязательные параметры
-    private void updateDuck(TestCaseRunner runner, String id, String color, double height, String material, String sound) {
-        runner.$(http().client("http://localhost:2222")
-                .send()
-                .put("/api/duck/update")
-                .queryParam("id", id)
-                .queryParam("color", color)
-                .queryParam("height", String.valueOf(height))
-                .queryParam("material", material)
-                .queryParam("sound", sound));
     }
 }

@@ -1,8 +1,18 @@
 package autotests.tests.actions;
 
 
-public class FlyTest  {
-    /*
+import autotests.clients.DuckActionsClient;
+import com.consol.citrus.TestCaseRunner;
+import com.consol.citrus.annotations.CitrusResource;
+import com.consol.citrus.annotations.CitrusTest;
+import org.springframework.http.HttpStatus;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Test;
+
+import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
+
+
+public class FlyTest extends DuckActionsClient {
 
     @Test(description = "Проверка того, что уточка с активными крыльями летает (wingState = ACTIVE)")
     @CitrusTest
@@ -49,12 +59,5 @@ public class FlyTest  {
         // проверить что ее нет в бд
     }
 
-    private void flyDuck(TestCaseRunner runner, String id) {
-        runner.$(http().client("http://localhost:2222")
-                .send()
-                .get("/api/duck/action/fly")
-                .queryParam("id", id));
-    }
 
-     */
 }
