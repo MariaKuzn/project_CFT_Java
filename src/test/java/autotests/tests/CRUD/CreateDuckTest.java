@@ -22,13 +22,12 @@ public class CreateDuckTest extends DuckCRUDClient {
         String sound = "quack";
         String wingsState = "FIXED";
 
-        Duck duck =
-                new Duck()
-                        .color(color)
-                        .height(height)
-                        .material(material)
-                        .sound(sound)
-                        .wingsState(wingsState);
+        Duck duck = new Duck()
+                .color(color)
+                .height(height)
+                .material(material)
+                .sound(sound)
+                .wingsState(wingsState);
 
         createDuckFromObject(runner, duck);
         validateStatusBodyAndSaveIdByJsonPath(runner, HttpStatus.OK, jsonPath()
@@ -52,13 +51,12 @@ public class CreateDuckTest extends DuckCRUDClient {
         String sound = "quack";
         String wingsState = "FIXED";
 
-        Duck duck =
-                new Duck()
-                        .color(color)
-                        .height(height)
-                        .material(material)
-                        .sound(sound)
-                        .wingsState(wingsState);
+        Duck duck = new Duck()
+                .color(color)
+                .height(height)
+                .material(material)
+                .sound(sound)
+                .wingsState(wingsState);
         createDuckFromObject(runner, duck);
 
         validateStatusBodyAndSaveIdByJsonPath(runner, HttpStatus.OK, jsonPath()

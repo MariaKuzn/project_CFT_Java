@@ -15,19 +15,12 @@ public class DeleteDuckTest extends DuckCRUDClient {
     @CitrusTest
     public void successfulDelete(@Optional @CitrusResource TestCaseRunner runner) {
 
-        String color = "green";
-        double height = 0.15;
-        String material = "rubber";
-        String sound = "quack";
-        String wingsState = "FIXED";
-
-        Duck duck =
-                new Duck()
-                        .color(color)
-                        .height(height)
-                        .material(material)
-                        .sound(sound)
-                        .wingsState(wingsState);
+        Duck duck = new Duck()
+                .color("green")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("FIXED");
 
         createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);

@@ -18,21 +18,17 @@ public class UpdateDuckTest extends DuckCRUDClient {
         String material = "rubber";
         String sound = "quack";
 
-        String newColor = "blue";
-        double newHeight = 1;
-
-        Duck duck =
-                new Duck()
-                        .color("green")
-                        .height(0.15)
-                        .material(material)
-                        .sound(sound)
-                        .wingsState("FIXED");
+        Duck duck = new Duck()
+                .color("green")
+                .height(0.15)
+                .material(material)
+                .sound(sound)
+                .wingsState("FIXED");
 
         createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
-        updateDuck(runner, "${duckId}", newColor, newHeight, material, sound);
+        updateDuck(runner, "${duckId}", "blue", 1, material, sound);
         validateResponseStatusAndBodyAsString(runner, HttpStatus.OK,
                 "{\"message\": \"Duck with id = " + "${duckId}" + " is updated\"}");
         // + проверка в БД, что изменили все, что требовалось
@@ -50,21 +46,17 @@ public class UpdateDuckTest extends DuckCRUDClient {
         String material = "rubber";
         String sound = "quack";
 
-        String newColor = "blue";
-        String newSound = "moooo";
-
-        Duck duck =
-                new Duck()
-                        .color("yellow")
-                        .height(0.15)
-                        .material(material)
-                        .sound(sound)
-                        .wingsState("FIXED");
+        Duck duck = new Duck()
+                .color("yellow")
+                .height(0.15)
+                .material(material)
+                .sound(sound)
+                .wingsState("FIXED");
 
         createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
-        updateDuck(runner, "${duckId}", newColor, height, material, newSound);
+        updateDuck(runner, "${duckId}", "blue", height, material, "moooo");
         validateResponseStatusAndBodyAsString(runner, HttpStatus.OK,
                 "{\"message\": \"Duck with id = " + "${duckId}" + " is updated\"}");
         // + проверка в БД, что изменили все, что требовалось
