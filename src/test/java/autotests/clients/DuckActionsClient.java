@@ -60,7 +60,8 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
     }
 
     //валидация ответа по ресурсу
-    public void validateResponseStatusAndBodyByResource(TestCaseRunner runner, HttpStatus status, String expectedPayload) {
+    public void validateResponseStatusAndBodyByResource(TestCaseRunner runner, HttpStatus status,
+                                                        String expectedPayload) {
         runner.$(http().client(yellowDuckService)
                 .receive()
                 .response(status)
@@ -80,7 +81,8 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
     }
 
     //валидация ответа по String
-    public void validateResponseStatusAndBodyAsString(TestCaseRunner runner, HttpStatus status, String responseMessage) {
+    public void validateResponseStatusAndBodyAsString(TestCaseRunner runner, HttpStatus status,
+                                                      String responseMessage) {
         runner.$(http().client(yellowDuckService)
                 .receive()
                 .response(status)

@@ -36,10 +36,12 @@ public class QuackTest extends DuckActionsClient {
         }
 
         quackDuck(runner, "${duckId}", String.valueOf(repetitionCount), String.valueOf(soundCount));
-        validateResponseStatusAndBodyAsString(runner, HttpStatus.OK, "{\"sound\": \"" + generateQuackMessage(sound, repetitionCount, soundCount) + "\"}");
+        validateResponseStatusAndBodyAsString(runner, HttpStatus.OK,
+                "{\"sound\": \"" + generateQuackMessage(sound, repetitionCount, soundCount) + "\"}");
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 
@@ -67,10 +69,12 @@ public class QuackTest extends DuckActionsClient {
         }
 
         quackDuck(runner, "${duckId}", String.valueOf(repetitionCount), String.valueOf(soundCount));
-        validateResponseStatusAndBodyAsString(runner, HttpStatus.OK, "{\"sound\": \"" + generateQuackMessage(sound, repetitionCount, soundCount) + "\"}");
+        validateResponseStatusAndBodyAsString(runner, HttpStatus.OK,
+                "{\"sound\": \"" + generateQuackMessage(sound, repetitionCount, soundCount) + "\"}");
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 }

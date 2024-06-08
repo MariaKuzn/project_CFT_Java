@@ -37,7 +37,8 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
-    public void updateDuck(TestCaseRunner runner, String id, String color, double height, String material, String sound) {
+    public void updateDuck(TestCaseRunner runner, String id, String color, double height, String material,
+                           String sound) {
         runner.$(http().client(yellowDuckService)
                 .send()
                 .put("/api/duck/update")

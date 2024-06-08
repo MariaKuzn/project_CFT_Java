@@ -31,7 +31,8 @@ public class SwimTest extends DuckActionsClient {
         validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("I'm swimming"));
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 
@@ -55,7 +56,8 @@ public class SwimTest extends DuckActionsClient {
         validateResponseStatusAndBodyByObject(runner, HttpStatus.NOT_FOUND, message);
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 }

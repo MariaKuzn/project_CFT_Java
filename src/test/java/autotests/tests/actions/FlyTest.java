@@ -28,10 +28,12 @@ public class FlyTest extends DuckActionsClient {
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
         flyDuck(runner, "${duckId}");
-        validateResponseStatusAndBodyByResource(runner, HttpStatus.OK, "flyDuckTest/flyDuckWithActiveWings.json");
+        validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
+                "flyDuckTest/flyDuckWithActiveWings.json");
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 
@@ -48,11 +50,13 @@ public class FlyTest extends DuckActionsClient {
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
         flyDuck(runner, "${duckId}");
-        validateResponseStatusAndBodyByResource(runner, HttpStatus.OK, "flyDuckTest/flyDuckWithFixedWings.json");
+        validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
+                "flyDuckTest/flyDuckWithFixedWings.json");
 
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 
@@ -69,10 +73,12 @@ public class FlyTest extends DuckActionsClient {
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
         flyDuck(runner, "${duckId}");
-        validateResponseStatusAndBodyByResource(runner, HttpStatus.OK, "flyDuckTest/flyDuckWithUndefinedWings.json");
+        validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
+                "flyDuckTest/flyDuckWithUndefinedWings.json");
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 }
