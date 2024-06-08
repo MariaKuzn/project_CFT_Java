@@ -1,14 +1,14 @@
 package autotests.tests.CRUD;
 
 import autotests.clients.DuckCRUDClient;
+import autotests.payloads.Duck;
+import autotests.payloads.Message;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-
-import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
 public class DeleteDuckTest extends DuckCRUDClient {
     @Test(description = "Проверка того, что уточка удаляется")
@@ -21,11 +21,19 @@ public class DeleteDuckTest extends DuckCRUDClient {
         String sound = "quack";
         String wingsState = "FIXED";
 
-        createDuck(runner, color, height, material, sound, wingsState);
+        Duck duck =
+                new Duck()
+                        .color(color)
+                        .height(height)
+                        .material(material)
+                        .sound(sound)
+                        .wingsState(wingsState);
+
+        createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("Duck is deleted"));
         // + проверить что ее нет в бд
     }
 }

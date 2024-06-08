@@ -4,9 +4,12 @@ import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.http.client.HttpClient;
 import com.consol.citrus.message.MessageType;
+import com.consol.citrus.message.builder.ObjectMappingPayloadBuilder;
 import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
 import com.consol.citrus.validation.json.JsonPathMessageValidationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,18 +21,14 @@ import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 public class DuckActionsClient extends TestNGCitrusSpringSupport {
     @Autowired
     protected HttpClient yellowDuckService;
-    public void createDuck(TestCaseRunner runner, String color, double height, String material, String sound, String wingsState) {
+
+    public void createDuckFromObject(TestCaseRunner runner, Object object) {
         runner.$(http().client(yellowDuckService)
                 .send()
                 .post("/api/duck/create")
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body("{\n" + "  \"color\": \"" + color + "\",\n"
-                        + "  \"height\": " + height + ",\n"
-                        + "  \"material\": \"" + material + "\",\n"
-                        + "  \"sound\": \"" + sound + "\",\n"
-                        + "  \"wingsState\": \"" + wingsState
-                        + "\"\n" + "}"));
+                .body(new ObjectMappingPayloadBuilder(object, new ObjectMapper())));
     }
 
     public void deleteDuck(TestCaseRunner runner, String id) {
@@ -40,6 +39,7 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
         //Проверка ответа что удалилось
     }
 
+    // валидация для всех эндпойнтов кроме create после создания утки
     public void validateStatusAndSaveId(TestCaseRunner runner, HttpStatus status) {
         runner.$(http().client(yellowDuckService)
                 .receive()
@@ -47,6 +47,8 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .message()
                 .extract(fromBody().expression("$.id", "duckId")));
     }
+
+    //валидация ответа по jsonPath
     public void validateResponseStatusAndJSONPath(TestCaseRunner runner, HttpStatus status,
                                                   JsonPathMessageValidationContext.Builder jsonPath) {
         runner.$(http().client(yellowDuckService)
@@ -56,6 +58,36 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .type(MessageType.JSON)
                 .validate(jsonPath));
     }
+
+    //валидация ответа по ресурсу
+    public void validateResponseStatusAndBodyByResource(TestCaseRunner runner, HttpStatus status, String expectedPayload) {
+        runner.$(http().client(yellowDuckService)
+                .receive()
+                .response(status)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ClassPathResource(expectedPayload)));
+    }
+
+    //валидация ответа по обьекту
+    public void validateResponseStatusAndBodyByObject(TestCaseRunner runner, HttpStatus status, Object body) {
+        runner.$(http().client(yellowDuckService)
+                .receive()
+                .response(status)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ObjectMappingPayloadBuilder(body, new ObjectMapper())));
+    }
+
+    //валидация ответа по String
+    public void validateResponseStatusAndBodyAsString(TestCaseRunner runner, HttpStatus status, String responseMessage) {
+        runner.$(http().client(yellowDuckService)
+                .receive()
+                .response(status)
+                .message()
+                .contentType(MediaType.APPLICATION_JSON_VALUE).body(responseMessage));
+    }
+
     public void flyDuck(TestCaseRunner runner, String id) {
         runner.$(http().client(yellowDuckService)
                 .send()
@@ -69,12 +101,14 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .get("/api/duck/action/properties")
                 .queryParam("id", id));
     }
+
     public void swimDuck(TestCaseRunner runner, String id) {
         runner.$(http().client(yellowDuckService)
                 .send()
                 .get("/api/duck/action/swim")
                 .queryParam("id", id));
     }
+
     public void quackDuck(TestCaseRunner runner, String id, String repetitionCount, String soundCount) {
         runner.$(http().client(yellowDuckService)
                 .send()

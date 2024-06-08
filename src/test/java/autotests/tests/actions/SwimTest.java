@@ -1,6 +1,8 @@
 package autotests.tests.actions;
 
 import autotests.clients.DuckActionsClient;
+import autotests.payloads.Duck;
+import autotests.payloads.Message;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -15,12 +17,18 @@ public class SwimTest extends DuckActionsClient {
     @Test(description = "Проверка того, что уточка плавает. Существующий id")
     @CitrusTest
     public void successfulSwimExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        createDuck(runner, "yellow", 0.15, "rubber", "quack", "ACTIVE");
+        Duck duck = new Duck()
+                .color("yellow")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("ACTIVE");
+
+        createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
         swimDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "I’m swimming"));
+        validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("I'm swimming"));
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
@@ -30,14 +38,21 @@ public class SwimTest extends DuckActionsClient {
     @Test(description = "Проверка того, что уточка не может плавть, т.к. не найдена. Неуществующий id")
     @CitrusTest
     public void failedSwimNotExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        createDuck(runner, "yellow", 0.15, "rubber", "quack", "ACTIVE");
+        Duck duck = new Duck()
+                .color("yellow")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("ACTIVE");
+
+        createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
         deleteDuck(runner, "${duckId}");
 
         swimDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.NOT_FOUND,
-                jsonPath().expression("$.error", "Duck not found")
-                        .expression("$.message", "Duck with id = " + "${duckId}" + " is not found"));
+        Message message = new Message().message("Duck with id = " + "${duckId}" + " is not found");
+
+        validateResponseStatusAndBodyByObject(runner, HttpStatus.NOT_FOUND, message);
 
         deleteDuck(runner, "${duckId}");
         validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));

@@ -1,6 +1,7 @@
 package autotests.tests.CRUD;
 
 import autotests.clients.DuckCRUDClient;
+import autotests.payloads.Duck;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -21,8 +22,16 @@ public class CreateDuckTest extends DuckCRUDClient {
         String sound = "quack";
         String wingsState = "FIXED";
 
-        createDuck(runner, color, height, material, sound, wingsState);
-        validateStatusBodyAndSaveId(runner, HttpStatus.OK, jsonPath()
+        Duck duck =
+                new Duck()
+                        .color(color)
+                        .height(height)
+                        .material(material)
+                        .sound(sound)
+                        .wingsState(wingsState);
+
+        createDuckFromObject(runner, duck);
+        validateStatusBodyAndSaveIdByJsonPath(runner, HttpStatus.OK, jsonPath()
                 .expression("$.color", color)
                 .expression("$.height", height)
                 .expression("$.material", material)
@@ -43,8 +52,16 @@ public class CreateDuckTest extends DuckCRUDClient {
         String sound = "quack";
         String wingsState = "FIXED";
 
-        createDuck(runner, color, height, material, sound, wingsState);
-        validateStatusBodyAndSaveId(runner, HttpStatus.OK, jsonPath()
+        Duck duck =
+                new Duck()
+                        .color(color)
+                        .height(height)
+                        .material(material)
+                        .sound(sound)
+                        .wingsState(wingsState);
+        createDuckFromObject(runner, duck);
+
+        validateStatusBodyAndSaveIdByJsonPath(runner, HttpStatus.OK, jsonPath()
                 .expression("$.color", color)
                 .expression("$.height", height)
                 .expression("$.material", material)
