@@ -72,6 +72,6 @@ public class UpdateDuckTest extends DuckCRUDClient {
                 .validate("HEIGHT", String.valueOf(height))
                 .validate("MATERIAL", material)
                 .validate("SOUND", newSound)
-                .validate("WINGS_STATE", String.valueOf(wingsState)));
+                .validate("WINGS_STATE", wingsState));
     }
 }
