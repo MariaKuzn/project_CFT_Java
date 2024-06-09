@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 
+import static com.consol.citrus.actions.ExecuteSQLAction.Builder.sql;
 import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
@@ -21,6 +23,31 @@ import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 public class DuckActionsClient extends TestNGCitrusSpringSupport {
     @Autowired
     protected HttpClient yellowDuckService;
+    @Autowired
+    protected SingleConnectionDataSource db;
+    public String returnInsertDuckSQLFromProperties(
+            int id, String color, double height, String material, String sound, String wingsState) {
+        return new StringBuilder()
+                .append("insert into DUCK (id, color, height, material, sound, wings_state) values (")
+                .append(id)
+                .append(", '")
+                .append(color)
+                .append("', ")
+                .append(height)
+                .append(", '")
+                .append(material)
+                .append("', '")
+                .append(sound)
+                .append("', '")
+                .append(wingsState)
+                .append("');")
+                .toString();
+    }
+
+    public void databaseUpdate(TestCaseRunner runner, String sql) {
+        runner.$(sql(db)
+                .statement(sql));
+    }
 
     public void createDuckFromObject(TestCaseRunner runner, Object object) {
         runner.$(http().client(yellowDuckService)
@@ -138,10 +165,10 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
     }
 
     // Проверка числа на четность, number - передается в виде строки
-    public boolean isEven(String number) {
+    public boolean isEven(int number) {
         int n;
         try {
-            n = Integer.parseInt(number);
+            n = number;
             return n % 2 == 0;
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
