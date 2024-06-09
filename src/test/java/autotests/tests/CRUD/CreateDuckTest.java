@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
+import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
 public class CreateDuckTest extends DuckCRUDClient {
@@ -29,6 +31,9 @@ public class CreateDuckTest extends DuckCRUDClient {
                 .sound(sound)
                 .wingsState(wingsState);
 
+        runner.$(doFinally().actions(context ->
+                databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=${duckId}")));
+
         createDuckFromObject(runner, duck);
         validateStatusBodyAndSaveIdByJsonPath(runner, HttpStatus.OK, jsonPath()
                 .expression("$.color", color)
@@ -37,9 +42,15 @@ public class CreateDuckTest extends DuckCRUDClient {
                 .expression("$.sound", sound)
                 .expression("$.wingsState", wingsState));
 
-        deleteDuck(runner, "${duckId}");
         // + Проверить что утка есть в БД, все параметры совпадают
-
+        runner.$(query(db)
+                .statement("SELECT * FROM DUCK WHERE ID=${duckId}")
+                .validate("ID", "${duckId}")
+                .validate("COLOR", String.valueOf(duck.color()))
+                .validate("HEIGHT", String.valueOf(duck.height()))
+                .validate("MATERIAL", String.valueOf(duck.material()))
+                .validate("SOUND", String.valueOf(duck.sound()))
+                .validate("WINGS_STATE", String.valueOf(duck.wingsState())));
     }
 
     @Test(description = "Проверка того, что уточка создана. Материал = wood")
@@ -57,8 +68,11 @@ public class CreateDuckTest extends DuckCRUDClient {
                 .material(material)
                 .sound(sound)
                 .wingsState(wingsState);
-        createDuckFromObject(runner, duck);
 
+        runner.$(doFinally().actions(context ->
+                databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=${duckId}")));
+
+        createDuckFromObject(runner, duck);
         validateStatusBodyAndSaveIdByJsonPath(runner, HttpStatus.OK, jsonPath()
                 .expression("$.color", color)
                 .expression("$.height", height)
@@ -66,7 +80,14 @@ public class CreateDuckTest extends DuckCRUDClient {
                 .expression("$.sound", sound)
                 .expression("$.wingsState", wingsState));
 
-        deleteDuck(runner, "${duckId}");
         // + Проверить что утка есть в БД, все параметры совпадают
+        runner.$(query(db)
+                .statement("SELECT * FROM DUCK WHERE ID=${duckId}")
+                .validate("ID", "${duckId}")
+                .validate("COLOR", String.valueOf(duck.color()))
+                .validate("HEIGHT", String.valueOf(duck.height()))
+                .validate("MATERIAL", String.valueOf(duck.material()))
+                .validate("SOUND", String.valueOf(duck.sound()))
+                .validate("WINGS_STATE", String.valueOf(duck.wingsState())));
     }
 }
