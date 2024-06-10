@@ -8,6 +8,7 @@ import com.consol.citrus.message.builder.ObjectMappingPayloadBuilder;
 import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
 import com.consol.citrus.validation.json.JsonPathMessageValidationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +25,12 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
     protected HttpClient yellowDuckService;
     @Autowired
     protected SingleConnectionDataSource db;
+
+    @Step("Подготовка/очистка базы данных")
+    public void databaseUpdate(TestCaseRunner runner, String sql) {
+        runner.$(sql(db)
+                .statement(sql));
+    }
 
     public String returnInsertDuckSQLFromProperties(
             int id, String color, double height, String material, String sound, String wingsState) {
@@ -44,11 +51,7 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
                 .toString();
     }
 
-    public void databaseUpdate(TestCaseRunner runner, String sql) {
-        runner.$(sql(db)
-                .statement(sql));
-    }
-
+    @Step("Эндпоинт для создания уточки")
     public void createDuckFromObject(TestCaseRunner runner, Object object) {
         runner.$(http().client(yellowDuckService)
                 .send()
@@ -58,6 +61,7 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
                 .body(new ObjectMappingPayloadBuilder(object, new ObjectMapper())));
     }
 
+    @Step("Эндпоинт для удаления уточки")
     public void deleteDuck(TestCaseRunner runner, String id) {
         runner.$(http().client(yellowDuckService)
                 .send()
@@ -65,6 +69,7 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
+    @Step("Эндпоинт для обновления уточки")
     public void updateDuck(TestCaseRunner runner, String id, String color, double height, String material,
                            String sound) {
         runner.$(http().client(yellowDuckService)
@@ -78,6 +83,7 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
     }
 
     // валидация для create
+    @Step("Валидация ответа для созданой уточки и сохранение ее id")
     public void validateStatusBodyAndSaveIdByJsonPath(TestCaseRunner runner, HttpStatus status,
                                                       JsonPathMessageValidationContext.Builder jsonPath) {
         runner.$(http().client(yellowDuckService)
@@ -90,6 +96,7 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
     }
 
     //валидация ответа по String
+    @Step("Валидация ответа на запрос по строке")
     public void validateResponseStatusAndBodyAsString(TestCaseRunner runner, HttpStatus status, String responseMessage) {
         runner.$(http().client(yellowDuckService)
                 .receive()
@@ -99,6 +106,7 @@ public class DuckCRUDClient extends TestNGCitrusSpringSupport {
     }
 
     //валидация ответа по обьекту
+    @Step("Валидация ответа на запрос по объекту")
     public void validateResponseStatusAndBodyByObject(TestCaseRunner runner, HttpStatus status, Object body) {
         runner.$(http().client(yellowDuckService)
                 .receive()

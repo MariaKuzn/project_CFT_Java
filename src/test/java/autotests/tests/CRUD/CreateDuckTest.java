@@ -5,6 +5,8 @@ import autotests.payloads.Duck;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -12,7 +14,8 @@ import org.testng.annotations.Test;
 import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
-
+@Epic("Тесты на duck-controller")
+@Feature("Эндпоинт /api/duck/create")
 public class CreateDuckTest extends DuckCRUDClient {
 
     @Test(description = "Проверка того, что уточка создана. Материал = rubber")

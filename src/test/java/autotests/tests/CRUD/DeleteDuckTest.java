@@ -5,6 +5,8 @@ import autotests.payloads.Message;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -12,6 +14,8 @@ import org.testng.annotations.Test;
 import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
+@Epic("Тесты на duck-controller")
+@Feature("Эндпоинт /api/duck/delete")
 public class DeleteDuckTest extends DuckCRUDClient {
     @Test(description = "Проверка того, что уточка удаляется")
     @CitrusTest
@@ -36,7 +40,7 @@ public class DeleteDuckTest extends DuckCRUDClient {
         validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("Duck is deleted"));
 
         runner.$(query(db)
-                .statement("SELECT ID FROM DUCK WHERE ID=" + id));
-        // как проверить на то что запрос вернул ноль строк?????
+                .statement("SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id)
+                .validate("AMOUNT", "0"));
     }
 }

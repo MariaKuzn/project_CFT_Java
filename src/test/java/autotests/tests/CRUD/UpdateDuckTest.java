@@ -4,6 +4,8 @@ import autotests.clients.DuckCRUDClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -11,6 +13,8 @@ import org.testng.annotations.Test;
 import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
+@Epic("Тесты на duck-controller")
+@Feature("Эндпоинт /api/duck/update")
 public class UpdateDuckTest extends DuckCRUDClient {
     @Test(description = "Проверка того, что у уточки можно изменить цвет и высоту")
     @CitrusTest

@@ -5,19 +5,22 @@ import autotests.payloads.DuckProperties;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
-
+@Epic("Тесты на duck-action-controller")
+@Feature("Эндпоинт /api/duck/action/properties")
 public class PropertiesTest extends DuckActionsClient {
     @Test(description = "Проверка получения Properties для уточки. Четный id, material = wood")
     @CitrusTest
     public void getPropertiesEvenIdWoodDuck(@Optional @CitrusResource TestCaseRunner runner) {
         //id - четный
-        int id = (int) Math.round(Math.random() * 1000 * 2);
+        int id = (int) (Math.round(Math.random() * 1000) * 2);
         String color = "yellow";
         double height = 0.15;
         String material = "wood";
@@ -52,7 +55,7 @@ public class PropertiesTest extends DuckActionsClient {
     @CitrusTest
     public void getPropertiesOddIdRubberDuck(@Optional @CitrusResource TestCaseRunner runner) {
         //id - нечетный
-        int id = (int) Math.round(Math.random() * 1000 * 2 + 1);
+        int id = (int) (Math.round(Math.random() * 1000) * 2 + 1);
         String color = "yellow";
         double height = 0.15;
         String material = "rubber";

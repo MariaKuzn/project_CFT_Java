@@ -1,63 +1,59 @@
 package autotests.tests.actions;
 
 import autotests.clients.DuckActionsClient;
-import autotests.payloads.Duck;
 import autotests.payloads.Message;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import com.consol.citrus.context.TestContext;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
+import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
+import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
+@Epic("Тесты на duck-action-controller")
+@Feature("Эндпоинт /api/duck/action/swim")
 public class SwimTest extends DuckActionsClient {
 
     @Test(description = "Проверка того, что уточка плавает. Существующий id")
     @CitrusTest
     public void successfulSwimExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        Duck duck = new Duck()
-                .color("yellow")
-                .height(0.15)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("ACTIVE");
+        int id = (int) Math.round(Math.random() * 1000);
+        String color = "yellow";
+        double height = 0.15;
+        String material = "wood";
+        String sound = "quack";
+        String wingsState = "FIXED";
 
-        createDuckFromObject(runner, duck);
-        validateStatusAndSaveId(runner, HttpStatus.OK);
+        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + id)));
+        databaseUpdate(runner, returnInsertDuckSQLFromProperties(id, color, height, material, sound, wingsState));
 
-        swimDuck(runner, "${duckId}");
+        swimDuck(runner, String.valueOf(id));
         validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("I'm swimming"));
-
-        deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "Duck is deleted"));
-        // проверить что ее нет в бд
     }
 
     @Test(description = "Проверка того, что уточка не может плавть, т.к. не найдена. Неуществующий id")
     @CitrusTest
-    public void failedSwimNotExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        Duck duck = new Duck()
-                .color("yellow")
-                .height(0.15)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("ACTIVE");
+    public void failedSwimNotExistingId(@Optional @CitrusResource TestCaseRunner runner,
+                                        @Optional @CitrusResource TestContext context) {
+        int id = 0;
+        boolean duckExist = true;
 
-        createDuckFromObject(runner, duck);
-        validateStatusAndSaveId(runner, HttpStatus.OK);
-        deleteDuck(runner, "${duckId}");
+        // Проверить что в бд нет утки с таким id запросом, если есть - сгенерировать новый id
+        while (duckExist) {
+            id = (int) Math.round(Math.random() * 1000);
+            runner.$(query(db)
+                    .statement("SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id)
+                    .extract("AMOUNT", "amount"));
+            duckExist = !"0".equals(context.getVariables().get("amount"));
+        }
 
-        swimDuck(runner, "${duckId}");
-        Message message = new Message().message("Duck with id = " + "${duckId}" + " is not found");
-
+        swimDuck(runner, String.valueOf(id));
+        Message message = new Message().message("Duck with id = " + id + " is not found");
         validateResponseStatusAndBodyByObject(runner, HttpStatus.NOT_FOUND, message);
-
-        deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "Duck is deleted"));
-        // проверить что ее нет в бд
     }
 }
