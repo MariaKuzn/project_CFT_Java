@@ -1,6 +1,8 @@
-package autotests.action;
+package autotests.tests.actions;
 
-import autotests.CommonMethod;
+import autotests.clients.DuckActionsClient;
+import autotests.payloads.Duck;
+import autotests.payloads.Message;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -8,46 +10,54 @@ import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 import static com.consol.citrus.validation.json.JsonPathMessageValidationContext.Builder.jsonPath;
 
-public class SwimTest extends CommonMethod {
+public class SwimTest extends DuckActionsClient {
+
     @Test(description = "Проверка того, что уточка плавает. Существующий id")
     @CitrusTest
     public void successfulSwimExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        createDuck(runner, "yellow", 0.15, "rubber", "quack", "ACTIVE");
+        Duck duck = new Duck()
+                .color("yellow")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("ACTIVE");
+
+        createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
 
         swimDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
-                jsonPath().expression("$.message", "I’m swimming"));
+        validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("I'm swimming"));
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
     }
 
     @Test(description = "Проверка того, что уточка не может плавть, т.к. не найдена. Неуществующий id")
     @CitrusTest
     public void failedSwimNotExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        createDuck(runner, "yellow", 0.15, "rubber", "quack", "ACTIVE");
+        Duck duck = new Duck()
+                .color("yellow")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("ACTIVE");
+
+        createDuckFromObject(runner, duck);
         validateStatusAndSaveId(runner, HttpStatus.OK);
         deleteDuck(runner, "${duckId}");
 
         swimDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.NOT_FOUND,
-                jsonPath().expression("$.error", "Duck not found")
-                        .expression("$.message", "Duck with id = " + "${duckId}" + " is not found"));
+        Message message = new Message().message("Duck with id = " + "${duckId}" + " is not found");
+
+        validateResponseStatusAndBodyByObject(runner, HttpStatus.NOT_FOUND, message);
 
         deleteDuck(runner, "${duckId}");
-        validateResponseStatusAndJSONPath(runner, HttpStatus.OK, jsonPath().expression("$.message", "Duck is deleted"));
+        validateResponseStatusAndJSONPath(runner, HttpStatus.OK,
+                jsonPath().expression("$.message", "Duck is deleted"));
         // проверить что ее нет в бд
-    }
-
-    private void swimDuck(TestCaseRunner runner, String id) {
-        runner.$(http().client("http://localhost:2222")
-                .send()
-                .get("/api/duck/action/swim")
-                .queryParam("id", id));
     }
 }
