@@ -1,6 +1,7 @@
 package autotests.tests.actions;
 
 import autotests.clients.DuckActionsClient;
+import autotests.payloads.Duck;
 import autotests.payloads.Message;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
@@ -22,17 +23,20 @@ public class SwimTest extends DuckActionsClient {
     @Test(description = "Проверка того, что уточка плавает. Существующий id")
     @CitrusTest
     public void successfulSwimExistingId(@Optional @CitrusResource TestCaseRunner runner) {
-        int id = (int) Math.round(Math.random() * 1000);
-        String color = "yellow";
-        double height = 0.15;
-        String material = "wood";
-        String sound = "quack";
-        String wingsState = "FIXED";
+        Duck duck = new Duck()
+                .id((int) Math.round(Math.random() * 1000))
+                .color("yellow")
+                .height(0.15)
+                .material("wood")
+                .sound("quack")
+                .wingsState("FIXED");
 
-        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + id)));
-        databaseUpdate(runner, returnInsertDuckSQLFromProperties(id, color, height, material, sound, wingsState));
+        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
+        databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
+                + "values (" + duck.id() + ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '" + duck.sound() + "', '" + duck.wingsState() + "')");
 
-        swimDuck(runner, String.valueOf(id));
+        swimDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByObject(runner, HttpStatus.OK, new Message().message("I'm swimming"));
     }
 
@@ -53,7 +57,7 @@ public class SwimTest extends DuckActionsClient {
         }
 
         swimDuck(runner, String.valueOf(id));
-        Message message = new Message().message("Duck with id = " + id + " is not found");
-        validateResponseStatusAndBodyByObject(runner, HttpStatus.NOT_FOUND, message);
+        validateResponseStatusAndBodyByObject(runner, HttpStatus.NOT_FOUND,
+                new Message().message("Duck with id = " + id + " is not found"));
     }
 }

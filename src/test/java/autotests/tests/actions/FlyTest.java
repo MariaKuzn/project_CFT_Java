@@ -2,6 +2,7 @@ package autotests.tests.actions;
 
 
 import autotests.clients.DuckActionsClient;
+import autotests.payloads.Duck;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -20,18 +21,20 @@ public class FlyTest extends DuckActionsClient {
     @Test(description = "Проверка того, что уточка с активными крыльями летает (wingState = ACTIVE)")
     @CitrusTest
     public void successfulFlyWingsActive(@Optional @CitrusResource TestCaseRunner runner) {
+        Duck duck = new Duck()
+                .id((int) Math.round(Math.random() * 1000))
+                .color("green")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("ACTIVE");
 
-        int id = (int) Math.round(Math.random() * 1000);
-        String color = "green";
-        double height = 0.15;
-        String material = "rubber";
-        String sound = "quack";
-        String wingsState = "ACTIVE";
+        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
+        databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
+                + "values (" + duck.id() +  ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '"+ duck.sound() + "', '" + duck.wingsState() + "')");
 
-        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + id)));
-        databaseUpdate(runner, returnInsertDuckSQLFromProperties(id, color, height, material, sound, wingsState));
-
-        flyDuck(runner, String.valueOf(id));
+        flyDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
                 "flyDuckTest/flyDuckWithActiveWings.json");
     }
@@ -39,17 +42,19 @@ public class FlyTest extends DuckActionsClient {
     @Test(description = "Проверка того, что уточка со связанными крыльями не летает (wingState = FIXED)")
     @CitrusTest
     public void successfulFlyWingsFixed(@Optional @CitrusResource TestCaseRunner runner) {
-        int id = (int) Math.round(Math.random() * 1000);
-        String color = "green";
-        double height = 0.15;
-        String material = "rubber";
-        String sound = "quack";
-        String wingsState = "FIXED";
+        Duck duck = new Duck()
+                .id((int) Math.round(Math.random() * 1000))
+                .color("green")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("FIXED");
 
-        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + id)));
-        databaseUpdate(runner, returnInsertDuckSQLFromProperties(id, color, height, material, sound, wingsState));
-
-        flyDuck(runner, String.valueOf(id));
+        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
+        databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
+                + "values (" + duck.id() +  ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '"+ duck.sound() + "', '" + duck.wingsState() + "')");
+        flyDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
                 "flyDuckTest/flyDuckWithFixedWings.json");
     }
@@ -57,17 +62,19 @@ public class FlyTest extends DuckActionsClient {
     @Test(description = "Проверка того, что уточка с крыльями в неопределенном состояниине летает (wingState = UNDEFINED)")
     @CitrusTest
     public void successfulFlyWingsNull(@Optional @CitrusResource TestCaseRunner runner) {
-        int id = (int) Math.round(Math.random() * 1000);
-        String color = "green";
-        double height = 0.15;
-        String material = "rubber";
-        String sound = "quack";
-        String wingsState = "UNDEFINED";
+        Duck duck = new Duck()
+                .id((int) Math.round(Math.random() * 1000))
+                .color("green")
+                .height(0.15)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("UNDEFINED");
 
-        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + id)));
-        databaseUpdate(runner, returnInsertDuckSQLFromProperties(id, color, height, material, sound, wingsState));
-
-        flyDuck(runner, String.valueOf(id));
+        runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
+        databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
+                + "values (" + duck.id() +  ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '"+ duck.sound() + "', '" + duck.wingsState() + "')");
+        flyDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
                 "flyDuckTest/flyDuckWithUndefinedWings.json");
     }
