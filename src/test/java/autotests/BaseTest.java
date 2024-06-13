@@ -26,12 +26,13 @@ public class BaseTest extends TestNGCitrusSpringSupport {
     @Autowired
     protected SingleConnectionDataSource db;
 
-    @Step("Подготовка/очистка базы данных")
+    @Step("РџРѕРґРіРѕС‚РѕРІРєР°/РѕС‡РёСЃС‚РєР° Р±Р°Р·С‹ РґР°РЅРЅС‹С…")
     public void databaseUpdate(TestCaseRunner runner, String sql) {
         runner.$(sql(db)
                 .statement(sql));
     }
-    public void checkDuckPropertiesInDB(TestCaseRunner runner, Duck duck){
+    @Step("РџСЂРѕРІРµСЂРєР° СЃРІРѕР№СЃС‚РІ СѓС‚РѕС‡РєРё РІ Р‘Р”")
+    protected void checkDuckPropertiesInDB(TestCaseRunner runner, Duck duck){
         runner.$(query(db)
                 .statement("SELECT * FROM DUCK WHERE ID=" + duck.id())
                 .validate("COLOR", duck.color())
@@ -40,17 +41,47 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .validate("SOUND", duck.sound())
                 .validate("WINGS_STATE", duck.wingsState()));
     }
+    @Step("РџСЂРѕРІРµСЂРєР°, С‡С‚Рѕ СѓС‚РєР° РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІ Р‘Р”")
+    protected void checkDuckIsAbsent(TestCaseRunner runner, int id){
+        runner.$(query(db)
+                .statement("SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id)
+                .validate("AMOUNT", "0"));
+    }
 
-    @Step("Send get request")
-    protected void sendGetRequest(TestCaseRunner runner, String path, String queName, String queValue) {
+    @Step("РћС‚РїСЂР°РІРёС‚СЊ GET-Р·Р°РїСЂРѕСЃ")
+    protected void sendGETRequest(TestCaseRunner runner, String path, String queryParam) {
         runner.$(http()
                 .client(yellowDuckService)
                 .send()
-                .get(path)
+                .get(path + queryParam));
+    }
+    @Step("РћС‚РїСЂР°РІРёС‚СЊ PUT-Р·Р°РїСЂРѕСЃ")
+    protected void sendPUTRequest(TestCaseRunner runner, String path, String queryParam) {
+        runner.$(http()
+                .client(yellowDuckService)
+                .send()
+                .put(path + queryParam));
+    }
+    @Step("РћС‚РїСЂР°РІРёС‚СЊ POST-Р·Р°РїСЂРѕСЃ")
+    protected void sendPOSTRequest(TestCaseRunner runner, String path, Object object) {
+        runner.$(http().client(yellowDuckService)
+                .send()
+                .post(path)
+                .message()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new ObjectMappingPayloadBuilder(object, new ObjectMapper())));
+    }
+    @Step("РћС‚РїСЂР°РІРёС‚СЊ DELETE-Р·Р°РїСЂРѕСЃ")
+    protected void sendDELETERequest(TestCaseRunner runner, String path, String queName, String queValue) {
+        runner.$(http()
+                .client(yellowDuckService)
+                .send()
+                .delete(path)
                 .queryParam(queName, queValue));
     }
-    @Step("Валидация ответа на запрос по ресурсу")
-    public void validateResponseStatusAndBodyByResource(TestCaseRunner runner, HttpStatus status,
+
+    @Step("Р’Р°Р»РёРґР°С†РёСЏ РѕС‚РІРµС‚Р° РЅР° Р·Р°РїСЂРѕСЃ РїРѕ СЂРµСЃСѓСЂСЃСѓ")
+    protected void validateResponseStatusAndBodyByResource(TestCaseRunner runner, HttpStatus status,
                                                         String expectedPayload) {
         runner.$(http().client(yellowDuckService)
                 .receive()
@@ -59,8 +90,8 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .type(MessageType.JSON)
                 .body(new ClassPathResource(expectedPayload)));
     }
-    @Step("Валидация ответа на запрос по объекту")
-    public void validateResponseStatusAndBodyByObject(TestCaseRunner runner, HttpStatus status, Object body) {
+    @Step("Р’Р°Р»РёРґР°С†РёСЏ РѕС‚РІРµС‚Р° РЅР° Р·Р°РїСЂРѕСЃ РїРѕ РѕР±СЉРµРєС‚Сѓ")
+    protected void validateResponseStatusAndBodyByObject(TestCaseRunner runner, HttpStatus status, Object body) {
         runner.$(http().client(yellowDuckService)
                 .receive()
                 .response(status)
@@ -69,9 +100,8 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .body(new ObjectMappingPayloadBuilder(body, new ObjectMapper())));
     }
 
-    //валидация ответа по String
-    @Step("Валидация ответа на запрос по строке")
-    public void validateResponseStatusAndBodyAsString(TestCaseRunner runner, HttpStatus status,
+    @Step("Р’Р°Р»РёРґР°С†РёСЏ РѕС‚РІРµС‚Р° РЅР° Р·Р°РїСЂРѕСЃ РїРѕ СЃС‚СЂРѕРєРµ")
+    protected void validateResponseStatusAndBodyAsString(TestCaseRunner runner, HttpStatus status,
                                                       String responseMessage) {
         runner.$(http().client(yellowDuckService)
                 .receive()

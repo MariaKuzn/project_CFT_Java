@@ -53,7 +53,7 @@ public class SwimTest extends DuckActionsClient {
             runner.$(query(db)
                     .statement("SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id)
                     .extract("AMOUNT", "amount"));
-            duckExist = !"0".equals(context.getVariables().get("amount"));
+            duckExist = !"0".equals(context.getVariables().get("amount").toString());
         }
 
         swimDuck(runner, String.valueOf(id));

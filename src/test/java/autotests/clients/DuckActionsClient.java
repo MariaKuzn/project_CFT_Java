@@ -6,37 +6,31 @@ import com.consol.citrus.TestCaseRunner;
 import io.qameta.allure.Step;
 import org.springframework.test.context.ContextConfiguration;
 
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
-
 @ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckActionsClient extends BaseTest {
 
     @Step("Эндпоинт для полета уточки")
-    public void flyDuck(TestCaseRunner runner, String id) {
-        sendGetRequest(runner, "/api/duck/action/fly", "id", id);
+    protected void flyDuck(TestCaseRunner runner, String id) {
+        sendGETRequest(runner, "/api/duck/action/fly", "?id=" + id);
     }
 
     @Step("Эндпоинт для получения свойств уточки")
-    public void getProperties(TestCaseRunner runner, String id) {
-        sendGetRequest(runner, "/api/duck/action/properties", "id", id);
+    protected void getProperties(TestCaseRunner runner, String id) {
+        sendGETRequest(runner, "/api/duck/action/properties", "?id=" + id);
     }
 
     @Step("Эндпоинт для плавания уточки")
-    public void swimDuck(TestCaseRunner runner, String id) {
-        sendGetRequest(runner, "/api/duck/action/swim", "id", id);
+    protected void swimDuck(TestCaseRunner runner, String id) {
+        sendGETRequest(runner, "/api/duck/action/swim", "?id=" + id);
     }
 
     @Step("Эндпоинт для крякания уточки")
-    public void quackDuck(TestCaseRunner runner, String id, String repetitionCount, String soundCount) {
-        runner.$(http().client(yellowDuckService)
-                .send()
-                .get("/api/duck/action/quack")
-                .queryParam("id", id)
-                .queryParam("repetitionCount", repetitionCount)
-                .queryParam("soundCount", soundCount));
+    protected void quackDuck(TestCaseRunner runner, String id, String repetitionCount, String soundCount) {
+        sendGETRequest(runner, "/api/duck/action/quack",
+                "?id=" + id + "&repetitionCount=" + repetitionCount + "&soundCount=" + soundCount);
     }
 
-    public String generateQuackMessage(String sound, int repetitionCount, int soundCount) {
+    protected String generateQuackMessage(String sound, int repetitionCount, int soundCount) {
         if (sound.isEmpty() || repetitionCount < 1 || soundCount < 1) {
             return null;
         }

@@ -31,8 +31,8 @@ public class FlyTest extends DuckActionsClient {
 
         runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
         databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
-                + "values (" + duck.id() +  ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
-                + "', '"+ duck.sound() + "', '" + duck.wingsState() + "')");
+                + "values (" + duck.id() + ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '" + duck.sound() + "', '" + duck.wingsState() + "')");
 
         flyDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
@@ -52,8 +52,8 @@ public class FlyTest extends DuckActionsClient {
 
         runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
         databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
-                + "values (" + duck.id() +  ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
-                + "', '"+ duck.sound() + "', '" + duck.wingsState() + "')");
+                + "values (" + duck.id() + ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '" + duck.sound() + "', '" + duck.wingsState() + "')");
         flyDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
                 "flyDuckTest/flyDuckWithFixedWings.json");
@@ -72,8 +72,8 @@ public class FlyTest extends DuckActionsClient {
 
         runner.$(doFinally().actions(context -> databaseUpdate(runner, "DELETE FROM DUCK WHERE ID=" + duck.id())));
         databaseUpdate(runner, "insert into DUCK (id, color, height, material, sound, wings_state) "
-                + "values (" + duck.id() +  ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
-                + "', '"+ duck.sound() + "', '" + duck.wingsState() + "')");
+                + "values (" + duck.id() + ", '" + duck.color() + "', " + duck.height() + ", '" + duck.material()
+                + "', '" + duck.sound() + "', '" + duck.wingsState() + "')");
         flyDuck(runner, String.valueOf(duck.id()));
         validateResponseStatusAndBodyByResource(runner, HttpStatus.OK,
                 "flyDuckTest/flyDuckWithUndefinedWings.json");
