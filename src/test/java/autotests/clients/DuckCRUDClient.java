@@ -14,7 +14,6 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-//@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckCRUDClient extends BaseTest {
     @Autowired
     protected HttpClient yellowDuckService;

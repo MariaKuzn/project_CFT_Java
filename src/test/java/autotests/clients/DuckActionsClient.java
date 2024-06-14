@@ -4,7 +4,6 @@ import autotests.BaseTest;
 import com.consol.citrus.TestCaseRunner;
 import io.qameta.allure.Step;
 
-//@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckActionsClient extends BaseTest {
 
     @Step("Эндпоинт для полета уточки")
