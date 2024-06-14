@@ -1,7 +1,6 @@
 package autotests.clients;
 
 import autotests.BaseTest;
-import autotests.EndpointConfig;
 import autotests.payloads.Duck;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.http.client.HttpClient;
@@ -11,12 +10,11 @@ import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.test.context.ContextConfiguration;
 
 import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-@ContextConfiguration(classes = {EndpointConfig.class})
+//@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckCRUDClient extends BaseTest {
     @Autowired
     protected HttpClient yellowDuckService;
@@ -25,17 +23,17 @@ public class DuckCRUDClient extends BaseTest {
 
     @Step("Эндпоинт для создания уточки")
     protected void createDuckFromObject(TestCaseRunner runner, Object object) {
-        sendPOSTRequest(runner, "/api/duck/create", object);
+        sendPostRequest(runner, "/api/duck/create", object);
     }
 
     @Step("Эндпоинт для удаления уточки")
     protected void deleteDuck(TestCaseRunner runner, String id) {
-        sendDELETERequest(runner, "/api/duck/delete", "id", id);
+        sendDeleteRequest(runner, "/api/duck/delete", "id", id);
     }
 
     @Step("Эндпоинт для обновления уточки")
     protected void updateDuck(TestCaseRunner runner, Duck duck) {
-        sendPUTRequest(runner, "/api/duck/update",
+        sendPutRequest(runner, "/api/duck/update",
                 "?id=" + duck.id()
                         + "&color=" + duck.color()
                         + "&height=" + duck.height()
@@ -54,5 +52,8 @@ public class DuckCRUDClient extends BaseTest {
                 .type(MessageType.JSON)
                 .validate(jsonPath)
                 .extract(fromBody().expression("$.id", "duckId")));
+    }
+    protected void checkDuckIsAbsent(TestCaseRunner runner, int id){
+        checkSomethingInDB(runner, "SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id, "AMOUNT", "0");
     }
 }

@@ -42,28 +42,28 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .validate("WINGS_STATE", duck.wingsState()));
     }
     @Step("Проверка, что утка отсутствует в БД")
-    protected void checkDuckIsAbsent(TestCaseRunner runner, int id){
+    protected void checkSomethingInDB(TestCaseRunner runner, String sql, String name, String value){
         runner.$(query(db)
-                .statement("SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id)
-                .validate("AMOUNT", "0"));
+                .statement(sql)
+                .validate(name, value));
     }
 
     @Step("Отправить GET-запрос")
-    protected void sendGETRequest(TestCaseRunner runner, String path, String queryParam) {
+    protected void sendGetRequest(TestCaseRunner runner, String path, String queryParam) {
         runner.$(http()
                 .client(yellowDuckService)
                 .send()
                 .get(path + queryParam));
     }
     @Step("Отправить PUT-запрос")
-    protected void sendPUTRequest(TestCaseRunner runner, String path, String queryParam) {
+    protected void sendPutRequest(TestCaseRunner runner, String path, String queryParam) {
         runner.$(http()
                 .client(yellowDuckService)
                 .send()
                 .put(path + queryParam));
     }
     @Step("Отправить POST-запрос")
-    protected void sendPOSTRequest(TestCaseRunner runner, String path, Object object) {
+    protected void sendPostRequest(TestCaseRunner runner, String path, Object object) {
         runner.$(http().client(yellowDuckService)
                 .send()
                 .post(path)
@@ -72,7 +72,7 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .body(new ObjectMappingPayloadBuilder(object, new ObjectMapper())));
     }
     @Step("Отправить DELETE-запрос")
-    protected void sendDELETERequest(TestCaseRunner runner, String path, String queName, String queValue) {
+    protected void sendDeleteRequest(TestCaseRunner runner, String path, String queName, String queValue) {
         runner.$(http()
                 .client(yellowDuckService)
                 .send()

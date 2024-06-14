@@ -1,32 +1,30 @@
 package autotests.clients;
 
 import autotests.BaseTest;
-import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import io.qameta.allure.Step;
-import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(classes = {EndpointConfig.class})
+//@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckActionsClient extends BaseTest {
 
     @Step("Эндпоинт для полета уточки")
     protected void flyDuck(TestCaseRunner runner, String id) {
-        sendGETRequest(runner, "/api/duck/action/fly", "?id=" + id);
+        sendGetRequest(runner, "/api/duck/action/fly", "?id=" + id);
     }
 
     @Step("Эндпоинт для получения свойств уточки")
     protected void getProperties(TestCaseRunner runner, String id) {
-        sendGETRequest(runner, "/api/duck/action/properties", "?id=" + id);
+        sendGetRequest(runner, "/api/duck/action/properties", "?id=" + id);
     }
 
     @Step("Эндпоинт для плавания уточки")
     protected void swimDuck(TestCaseRunner runner, String id) {
-        sendGETRequest(runner, "/api/duck/action/swim", "?id=" + id);
+        sendGetRequest(runner, "/api/duck/action/swim", "?id=" + id);
     }
 
     @Step("Эндпоинт для крякания уточки")
     protected void quackDuck(TestCaseRunner runner, String id, String repetitionCount, String soundCount) {
-        sendGETRequest(runner, "/api/duck/action/quack",
+        sendGetRequest(runner, "/api/duck/action/quack",
                 "?id=" + id + "&repetitionCount=" + repetitionCount + "&soundCount=" + soundCount);
     }
 
