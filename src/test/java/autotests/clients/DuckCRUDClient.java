@@ -52,6 +52,7 @@ public class DuckCRUDClient extends BaseTest {
                 .validate(jsonPath)
                 .extract(fromBody().expression("$.id", "duckId")));
     }
+    @Step("Проверка, что утка отсутствует в БД")
     protected void checkDuckIsAbsent(TestCaseRunner runner, int id){
         checkSomethingInDB(runner, "SELECT COUNT(ID) AS AMOUNT FROM DUCK WHERE ID=" + id, "AMOUNT", "0");
     }

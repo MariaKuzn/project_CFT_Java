@@ -41,7 +41,7 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .validate("SOUND", duck.sound())
                 .validate("WINGS_STATE", duck.wingsState()));
     }
-    @Step("Проверка, что утка отсутствует в БД")
+    @Step("Проверка в БД")
     protected void checkSomethingInDB(TestCaseRunner runner, String sql, String name, String value){
         runner.$(query(db)
                 .statement(sql)
